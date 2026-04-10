@@ -12,14 +12,12 @@ allprojects {
     }
 }
 
-// Configuração centralizada apenas para os submódulos
 subprojects {
-    // Escuta: Se o submódulo aplicar o plugin "java", injete esta configuração nele
-    plugins.withType<JavaPlugin> {
-        extensions.configure<JavaPluginExtension> {
-            toolchain {
-                languageVersion = JavaLanguageVersion.of(25)
-            }
+    apply(plugin = "java")
+
+    extensions.configure<JavaPluginExtension> {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(25)
         }
     }
 }

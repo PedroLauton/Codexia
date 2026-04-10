@@ -1,11 +1,9 @@
 rootProject.name = "codexia"
 
-include(
-    "codexia-identity",
-    "codexia-shared",
-    "codexia-workspace",
-    "codexia-notification",
-    "codexia-ai",
-    "codexia-snippet"
-    "codexia-main"
-)
+include("codexia-shared")
+include("codexia-snippet")
+include("codexia-ai")
+include("codexia-identity")
+include("codexia-notification")
+include("codexia-main")
+include("codexia-workspace")

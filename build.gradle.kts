@@ -1,28 +1,25 @@
 plugins {
-	java
-	id("org.springframework.boot") version "4.0.5"
-	id("io.spring.dependency-management") version "1.1.7"
+    id("org.springframework.boot") version "4.0.5" apply false
+    id("io.spring.dependency-management") version "1.1.7" apply false
 }
 
-group = "br.com"
-version = "0.0.1-SNAPSHOT"
+allprojects {
+    group = "br.com.codexia"
+    version = "1.0.0-SNAPSHOT"
 
-java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(25)
-	}
+    repositories {
+        mavenCentral()
+    }
 }
 
-repositories {
-	mavenCentral()
-}
-
-dependencies {
-	implementation("org.springframework.boot:spring-boot-starter")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-}
-
-tasks.withType<Test> {
-	useJUnitPlatform()
+// Configuração centralizada apenas para os submódulos
+subprojects {
+    // Escuta: Se o submódulo aplicar o plugin "java", injete esta configuração nele
+    plugins.withType<JavaPlugin> {
+        extensions.configure<JavaPluginExtension> {
+            toolchain {
+                languageVersion = JavaLanguageVersion.of(25)
+            }
+        }
+    }
 }

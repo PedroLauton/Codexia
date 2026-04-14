@@ -2,6 +2,7 @@ package br.com.codexia.snippet.domain.model;
 
 import br.com.codexia.shared.domain.model.AccountId;
 import br.com.codexia.shared.domain.model.WorkspaceId;
+import br.com.codexia.snippet.domain.exception.DeletedSnippetMutationException;
 
 import java.time.Instant;
 import java.util.HashSet;
@@ -9,7 +10,8 @@ import java.util.Set;
 
 public class Snippet {
 
-    //TODO: Alterar regra e local
+    // TODO: Mover para SnippetPolicy ou SnippetDomainService quando
+    //  a regra exigir variação por Workspace ou plano de assinatura (quem sabe?).
     private static final int MAX_TAGS = 10;
 
     private final SnippetId id;
@@ -17,7 +19,7 @@ public class Snippet {
     private final AccountId accountId;
     private CategoryId categoryId;
     private Set<TagId> tagIds;
-    private Set<SnippetVersion> versions = new HashSet<>();
+    private Set<SnippetVersion> versions;
     private final Instant createdAt;
     private Instant updatedAt;
     private Instant deletedAt;
@@ -38,19 +40,21 @@ public class Snippet {
         this.workspaceId = workspaceId;
         this.accountId = accountId;
         this.categoryId = categoryId;
-        this.tagIds = tagIds;
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
+        this.versions = new HashSet<>();
 
-        this.addVersion(title, description, content, language);
+        this.versions.add(buildVersion(title, description, content, language));
     }
 
     public void addVersion(String title, String description, String content, Language language) {
-        this.versions.add(new SnippetVersion(this.id, title, description, content, language));
+        checkNotDeleted();
+        this.versions.add(buildVersion(title, description, content, language));
         this.updatedAt = Instant.now();
     }
 
     public void assignToCategory(CategoryId categoryId) {
+        checkNotDeleted();
         if (categoryId == null) {
             throw new IllegalArgumentException("Category cannot be null.");
         }
@@ -59,6 +63,7 @@ public class Snippet {
     }
 
     public void linkTag(TagId tagId) {
+        checkNotDeleted();
         if (tagId == null) {
             throw new IllegalArgumentException("The tag cannot be null.");
         }
@@ -72,24 +77,32 @@ public class Snippet {
     }
 
     public void unlinkTag(TagId tagId) {
+        checkNotDeleted();
         if (tagId == null) return;
 
         boolean removed = this.tagIds.remove(tagId);
-        
+
         if (removed) {
             this.updatedAt = Instant.now();
         }
     }
 
     public void delete() {
-        if (this.deletedAt != null) {
-            throw new IllegalStateException("Snippet already deleted");
-        }
-
+        checkNotDeleted();
         this.deletedAt = Instant.now();
     }
 
     public boolean isDeleted() {
         return this.deletedAt != null;
+    }
+
+    private void checkNotDeleted() {
+        if (this.deletedAt != null) {
+            throw new DeletedSnippetMutationException(this.id);
+        }
+    }
+
+    private SnippetVersion buildVersion(String title, String description, String content, Language language) {
+        return new SnippetVersion(this.id, title, description, content, language);
     }
 }

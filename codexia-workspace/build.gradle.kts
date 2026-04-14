@@ -2,7 +2,7 @@ plugins {
     id("java")
 }
 
-group = "br.com.curso"
+group = "br.com.codexia"
 version = "1.0-SNAPSHOT"
 
 repositories {

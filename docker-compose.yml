@@ -1,0 +1,29 @@
+# docker-compose.yml
+services:
+  postgres:
+    image: postgres:16
+    container_name: codexia-db
+    environment:
+      POSTGRES_DB: codexia
+      POSTGRES_USER: codexia
+      POSTGRES_PASSWORD: codexia
+    ports:
+      - "5432:5432"
+    volumes:
+      - codexia_data:/var/lib/postgresql/data
+
+  postgres-test:
+    image: postgres:16
+    container_name: codexia-db-test
+    environment:
+      POSTGRES_DB: codexia_test
+      POSTGRES_USER: codexia
+      POSTGRES_PASSWORD: codexia
+    ports:
+      - "5433:5432"
+    volumes:
+      - codexia_test_data:/var/lib/postgresql/data
+
+volumes:
+  codexia_data:
+  codexia_test_data:

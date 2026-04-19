@@ -1,3 +1,8 @@
+plugins {
+    id("org.springframework.boot")
+    id("io.spring.dependency-management")
+}
+
 group = "br.com.codexia"
 version = "1.0-SNAPSHOT"
 
@@ -6,9 +11,16 @@ repositories {
 }
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation(project(":codexia-shared"))
+    implementation(project(":codexia-snippet"))
+    implementation(project(":codexia-identity"))
+    implementation(project(":codexia-workspace"))
+    implementation(project(":codexia-ai"))
+    implementation(project(":codexia-notification"))
+
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    runtimeOnly("org.postgresql:postgresql")
 }
 
 tasks.test {

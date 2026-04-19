@@ -27,4 +27,41 @@ public class SnippetVersion {
         this.createdAt = Instant.now();
     }
 
+    public SnippetVersion(SnippetVersionId id, SnippetId snippetId, String title,  String description, String content, Language language,  Instant createdAt) {
+        this.id = id;
+        this.snippetId = snippetId;
+        this.title = title;
+        this.description = description;
+        this.content = content;
+        this.language = language;
+        this.createdAt = createdAt;
+    }
+
+    public SnippetVersionId getId() {
+        return id;
+    }
+
+    public SnippetId getSnippetId() {
+        return snippetId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
 }

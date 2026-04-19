@@ -3,8 +3,10 @@ package br.com.codexia.snippet.domain.model;
 import br.com.codexia.shared.domain.model.AccountId;
 import br.com.codexia.shared.domain.model.WorkspaceId;
 import br.com.codexia.snippet.domain.exception.DeletedSnippetMutationException;
+import br.com.codexia.snippet.domain.exception.SnippetTagLimitException;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,7 +35,7 @@ public class Snippet {
         this.tagIds = tagIds != null ? new HashSet<>(tagIds) : new HashSet<>();
 
         if (this.tagIds.size() > MAX_TAGS) {
-            throw new IllegalArgumentException("The snippet cannot exceed the limit of " + MAX_TAGS + " tags.");
+            throw new SnippetTagLimitException("The snippet cannot exceed the limit of " + MAX_TAGS + " tags.");
         }
 
         this.id = SnippetId.generate();
@@ -45,6 +47,18 @@ public class Snippet {
         this.versions = new HashSet<>();
 
         this.versions.add(buildVersion(title, description, content, language));
+    }
+
+    public Snippet(SnippetId id, WorkspaceId workspaceId, AccountId accountId,  CategoryId categoryId, Set<TagId> tagIds,  Set<SnippetVersion> versions, Instant createdAt,  Instant updatedAt, Instant deletedAt) {
+        this.id = id;
+        this.workspaceId = workspaceId;
+        this.accountId = accountId;
+        this.categoryId = categoryId;
+        this.tagIds = new HashSet<>(tagIds);
+        this.versions = new HashSet<>(versions);
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
     }
 
     public void addVersion(String title, String description, String content, Language language) {
@@ -69,7 +83,7 @@ public class Snippet {
         }
 
         if (this.tagIds.size() >= MAX_TAGS) {
-            throw new IllegalStateException("Maximum limit of  " + MAX_TAGS + " tags reached.");
+            throw new SnippetTagLimitException("Maximum limit of  " + MAX_TAGS + " tags reached.");
         }
 
         this.tagIds.add(tagId);
@@ -104,5 +118,41 @@ public class Snippet {
 
     private SnippetVersion buildVersion(String title, String description, String content, Language language) {
         return new SnippetVersion(this.id, title, description, content, language);
+    }
+
+    public SnippetId getId() {
+        return id;
+    }
+
+    public WorkspaceId getWorkspaceId() {
+        return workspaceId;
+    }
+
+    public AccountId getAccountId() {
+        return accountId;
+    }
+
+    public CategoryId getCategoryId() {
+        return categoryId;
+    }
+
+    public Set<TagId> getTagIds() {
+        return Collections.unmodifiableSet(tagIds);
+    }
+
+    public Set<SnippetVersion> getVersions() {
+        return Collections.unmodifiableSet(versions);
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public Instant getDeletedAt() {
+        return deletedAt;
     }
 }

@@ -1,8 +1,8 @@
-package br.com.codexia.snippet.application.ports.output;
+package br.com.codexia.snippet.application.ports.output.query;
 
 import br.com.codexia.shared.domain.model.WorkspaceId;
 import br.com.codexia.snippet.domain.model.CategoryId;
 
-public interface CategoryRepositoryPort {
+public interface CategoryQueryPort {
     boolean existsById(CategoryId id, WorkspaceId workspaceId);
 }

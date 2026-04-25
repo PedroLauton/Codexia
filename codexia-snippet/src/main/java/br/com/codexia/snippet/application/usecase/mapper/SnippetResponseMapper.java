@@ -1,8 +1,6 @@
 package br.com.codexia.snippet.application.usecase.mapper;
 
-import br.com.codexia.snippet.application.dto.response.SnippetResponse;
-import br.com.codexia.snippet.application.dto.response.SnippetVersionResponse;
-import br.com.codexia.snippet.application.dto.response.TagSummaryResponse;
+import br.com.codexia.snippet.application.dto.response.*;
 import br.com.codexia.snippet.domain.model.Snippet;
 import br.com.codexia.snippet.domain.model.SnippetVersion;
 import br.com.codexia.snippet.domain.model.Tag;
@@ -33,6 +31,26 @@ public final class SnippetResponseMapper {
                 snippet.getUpdatedAt()
             );
 
+    }
+
+    public static SnippetVersionAddedResponse toVersionAddedResponse(Snippet snippet, SnippetVersion version) {
+        return new SnippetVersionAddedResponse(
+                snippet.getId().value().toString(),
+                toVersionResponse(version),
+                snippet.getUpdatedAt()
+        );
+    }
+
+    public static SnippetReassignedResponse toReassignedResponse(Snippet snippet,  List<Tag> tags) {
+        return new SnippetReassignedResponse(
+                snippet.getId().value().toString(),
+                snippet.getWorkspaceId().value().toString(),
+                snippet.getCategoryId().value().toString(),
+                tags.stream()
+                        .map(SnippetResponseMapper::toTagSummary)
+                        .collect(Collectors.toUnmodifiableSet()),
+                snippet.getUpdatedAt()
+        );
     }
 
     private static TagSummaryResponse toTagSummary(Tag tag) {

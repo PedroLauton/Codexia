@@ -1,7 +1,7 @@
-package br.com.codexia.snippet.infrastructure.adapters.output.persistence.adapter;
+package br.com.codexia.snippet.infrastructure.adapters.output.persistence.adapter.query;
 
 import br.com.codexia.shared.domain.model.WorkspaceId;
-import br.com.codexia.snippet.application.ports.output.TagRepositoryPort;
+import br.com.codexia.snippet.application.ports.output.query.TagQueryPort;
 import br.com.codexia.snippet.domain.model.Tag;
 import br.com.codexia.snippet.domain.model.TagId;
 import br.com.codexia.snippet.infrastructure.adapters.output.persistence.entity.TagJpaEntity;
@@ -15,11 +15,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class TagRepositoryAdapter implements TagRepositoryPort {
+public class TagQueryAdapter implements TagQueryPort {
 
     private final TagJpaRepository tagJpaRepository;
 
-    public TagRepositoryAdapter(TagJpaRepository tagJpaRepository) {
+    public TagQueryAdapter(TagJpaRepository tagJpaRepository) {
         this.tagJpaRepository = tagJpaRepository;
     }
 

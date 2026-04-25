@@ -61,10 +61,12 @@ public class Snippet {
         this.deletedAt = deletedAt;
     }
 
-    public void addVersion(String title, String description, String content, Language language) {
+    public SnippetVersion addVersion(String title, String description, String content, Language language) {
         checkNotDeleted();
-        this.versions.add(buildVersion(title, description, content, language));
+        SnippetVersion version = buildVersion(title, description, content, language);
+        this.versions.add(version);
         this.updatedAt = Instant.now();
+        return version;
     }
 
     public void assignToCategory(CategoryId categoryId) {
@@ -78,9 +80,12 @@ public class Snippet {
 
     public void linkTag(TagId tagId) {
         checkNotDeleted();
+
         if (tagId == null) {
             throw new IllegalArgumentException("The tag cannot be null.");
         }
+
+        if (this.tagIds.contains(tagId)) return;
 
         if (this.tagIds.size() >= MAX_TAGS) {
             throw new SnippetTagLimitException("Maximum limit of  " + MAX_TAGS + " tags reached.");

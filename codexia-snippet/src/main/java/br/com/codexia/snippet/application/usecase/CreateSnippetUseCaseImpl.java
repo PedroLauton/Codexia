@@ -6,9 +6,11 @@ import br.com.codexia.shared.domain.model.WorkspaceId;
 import br.com.codexia.snippet.application.dto.command.CreateSnippetCommand;
 import br.com.codexia.snippet.application.dto.response.SnippetResponse;
 import br.com.codexia.snippet.application.ports.input.CreateSnippetUseCase;
-import br.com.codexia.snippet.application.ports.output.CategoryRepositoryPort;
-import br.com.codexia.snippet.application.ports.output.SnippetRepositoryPort;
-import br.com.codexia.snippet.application.ports.output.TagRepositoryPort;
+import br.com.codexia.snippet.application.ports.output.command.CategoryCommandPort;
+import br.com.codexia.snippet.application.ports.output.command.SnippetCommandPort;
+import br.com.codexia.snippet.application.ports.output.command.TagCommandPort;
+import br.com.codexia.snippet.application.ports.output.query.CategoryQueryPort;
+import br.com.codexia.snippet.application.ports.output.query.TagQueryPort;
 import br.com.codexia.snippet.application.usecase.mapper.SnippetResponseMapper;
 import br.com.codexia.snippet.domain.model.*;
 
@@ -17,14 +19,14 @@ import java.util.stream.Collectors;
 
 public class CreateSnippetUseCaseImpl implements CreateSnippetUseCase {
 
-    private SnippetRepositoryPort snippetRepositoryPort;
-    private CategoryRepositoryPort categoryRepositoryPort;
-    private TagRepositoryPort tagRepositoryPort;
+    private SnippetCommandPort snippetCommandPort;
+    private CategoryQueryPort categoryQueryPort;
+    private TagQueryPort tagQueryPort;
 
-    public CreateSnippetUseCaseImpl(SnippetRepositoryPort snippetRepositoryPort, CategoryRepositoryPort categoryRepositoryPort, TagRepositoryPort tagRepositoryPort) {
-        this.snippetRepositoryPort = snippetRepositoryPort;
-        this.categoryRepositoryPort = categoryRepositoryPort;
-        this.tagRepositoryPort = tagRepositoryPort;
+    public CreateSnippetUseCaseImpl(SnippetCommandPort snippetCommandPort, CategoryQueryPort categoryQueryPort, TagQueryPort tagQueryPort) {
+        this.snippetCommandPort = snippetCommandPort;
+        this.categoryQueryPort = categoryQueryPort;
+        this.tagQueryPort = tagQueryPort;
     }
 
     @Override
@@ -43,13 +45,13 @@ public class CreateSnippetUseCaseImpl implements CreateSnippetUseCase {
         Snippet newSnippet = new Snippet(workspaceId, accountId, categoryId, tagIds,
                 command.title(), command.description(), command.content(), language);
 
-        snippetRepositoryPort.save(newSnippet);
+        snippetCommandPort.save(newSnippet);
 
         return SnippetResponseMapper.toResponse(newSnippet, tags);
     }
 
     private void validateCategory(CategoryId categoryId, WorkspaceId workspaceId) {
-        if(!categoryRepositoryPort.existsById(categoryId, workspaceId)) {
+        if(!categoryQueryPort.existsById(categoryId, workspaceId)) {
             throw new ResourceNotFoundException("Category not found.");
         }
     }
@@ -57,7 +59,7 @@ public class CreateSnippetUseCaseImpl implements CreateSnippetUseCase {
     private List<Tag> validateAndResolveTags(Set<TagId> tagsIds, WorkspaceId workspaceId) {
         if(tagsIds.isEmpty()) return List.of();
 
-        List<Tag> tags = tagRepositoryPort.findAllByIds(tagsIds, workspaceId);
+        List<Tag> tags = tagQueryPort.findAllByIds(tagsIds, workspaceId);
 
         if(tags.size() != tagsIds.size()) {
             throw new ResourceNotFoundException("One or more tags not found.");

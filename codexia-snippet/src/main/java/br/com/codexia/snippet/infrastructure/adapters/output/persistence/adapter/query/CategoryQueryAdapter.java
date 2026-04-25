@@ -1,18 +1,18 @@
-package br.com.codexia.snippet.infrastructure.adapters.output.persistence.adapter;
+package br.com.codexia.snippet.infrastructure.adapters.output.persistence.adapter.query;
 
 import br.com.codexia.shared.domain.model.WorkspaceId;
-import br.com.codexia.snippet.application.ports.output.CategoryRepositoryPort;
+import br.com.codexia.snippet.application.ports.output.query.CategoryQueryPort;
 import br.com.codexia.snippet.domain.model.CategoryId;
 import br.com.codexia.snippet.infrastructure.adapters.output.persistence.repository.CategoryJpaRepository;
 
 import org.springframework.stereotype.Component;
 
 @Component
-public class CategoryRepositoryAdapter implements CategoryRepositoryPort {
+public class CategoryQueryAdapter implements CategoryQueryPort {
 
     private final CategoryJpaRepository categoryJpaRepository;
 
-    public CategoryRepositoryAdapter(CategoryJpaRepository categoryJpaRepository) {
+    public CategoryQueryAdapter(CategoryJpaRepository categoryJpaRepository) {
         this.categoryJpaRepository = categoryJpaRepository;
     }
 

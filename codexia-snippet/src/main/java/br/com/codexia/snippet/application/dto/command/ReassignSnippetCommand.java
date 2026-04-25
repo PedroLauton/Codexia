@@ -3,17 +3,13 @@ package br.com.codexia.snippet.application.dto.command;
 import java.util.Collections;
 import java.util.Set;
 
-public record CreateSnippetCommand(
+public record ReassignSnippetCommand(
+        String snippetId,
         String workspaceId,
-        String accountId,
         String categoryId,
-        Set<String> tagIds,
-        String title,
-        String description,
-        String content,
-        String language
+        Set<String> tagIds
 ) {
-    public CreateSnippetCommand {
+    public ReassignSnippetCommand {
         tagIds = (tagIds == null) ? Collections.emptySet() : Set.copyOf(tagIds);
     }
 }

@@ -1,6 +1,8 @@
 package br.com.codexia.snippet.domain.model;
 
 import br.com.codexia.shared.domain.model.WorkspaceId;
+import br.com.codexia.snippet.domain.exception.CategoryNotDeletedException;
+import br.com.codexia.snippet.domain.exception.DeletedCategoryMutationException;
 
 import java.time.Instant;
 
@@ -38,8 +40,9 @@ public class Category {
     }
 
     public void updateMetadata(String name, String description) {
+        checkNotDeleted();
         if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("Name and description cannot be null.");
+            throw new IllegalArgumentException("Name is mandatory.");
         }
 
         this.name = name;
@@ -47,11 +50,18 @@ public class Category {
         this.updatedAt = Instant.now();
     }
 
-    public void delete() {
-        if (this.deletedAt != null) {
-            throw new IllegalStateException("Category already deleted");
+    public void restore() {
+        if (!isDeleted()) {
+            throw new CategoryNotDeletedException(this.id);
         }
 
+        this.deletedAt = null;
+        this.updatedAt = Instant.now();
+    }
+
+
+    public void delete() {
+        checkNotDeleted();
         this.deletedAt = Instant.now();
     }
 
@@ -85,5 +95,11 @@ public class Category {
 
     public Instant getDeletedAt() {
         return deletedAt;
+    }
+
+    private void checkNotDeleted() {
+        if (isDeleted()) {
+            throw new DeletedCategoryMutationException(this.id);
+        }
     }
 }

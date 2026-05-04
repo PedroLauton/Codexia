@@ -1,0 +1,21 @@
+package br.com.codexia.snippet.application.usecase.mapper;
+
+import br.com.codexia.snippet.application.dto.response.CategoryResponse;
+import br.com.codexia.snippet.domain.model.Category;
+
+public final class CategoryResponseMapper {
+
+    private CategoryResponseMapper() {
+    }
+
+    public static CategoryResponse toResponse(Category category) {
+        return new CategoryResponse(
+                category.getId().value().toString(),
+                category.getWorkspaceId().value().toString(),
+                category.getName(),
+                category.getDescription(),
+                category.getCreatedAt(),
+                category.getUpdatedAt()
+        );
+    }
+}

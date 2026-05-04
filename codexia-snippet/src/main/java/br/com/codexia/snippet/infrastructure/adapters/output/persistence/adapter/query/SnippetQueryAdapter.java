@@ -32,4 +32,9 @@ public class SnippetQueryAdapter implements SnippetQueryPort {
     public Optional<Snippet> findById(SnippetId id, WorkspaceId workspaceId) {
         return Optional.empty();
     }
+
+    @Override
+    public boolean existsActiveSnippetsByCategoryId(CategoryId categoryId, WorkspaceId workspaceId) {
+        return false;
+    }
 }

@@ -2,7 +2,7 @@ package br.com.codexia.snippet.infrastructure.adapters.input.rest.controller;
 
 import br.com.codexia.snippet.application.dto.command.CreateSnippetCommand;
 import br.com.codexia.snippet.application.dto.response.SnippetResponse;
-import br.com.codexia.snippet.application.ports.input.CreateSnippetUseCase;
+import br.com.codexia.snippet.application.ports.input.snippet.CreateSnippetUseCase;
 import br.com.codexia.snippet.infrastructure.adapters.input.rest.dto.request.CreateSnippetRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

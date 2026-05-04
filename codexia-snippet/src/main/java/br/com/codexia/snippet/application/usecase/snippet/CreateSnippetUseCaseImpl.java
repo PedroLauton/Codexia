@@ -1,14 +1,12 @@
-package br.com.codexia.snippet.application.usecase;
+package br.com.codexia.snippet.application.usecase.snippet;
 
 import br.com.codexia.shared.domain.exception.ResourceNotFoundException;
 import br.com.codexia.shared.domain.model.AccountId;
 import br.com.codexia.shared.domain.model.WorkspaceId;
 import br.com.codexia.snippet.application.dto.command.CreateSnippetCommand;
 import br.com.codexia.snippet.application.dto.response.SnippetResponse;
-import br.com.codexia.snippet.application.ports.input.CreateSnippetUseCase;
-import br.com.codexia.snippet.application.ports.output.command.CategoryCommandPort;
+import br.com.codexia.snippet.application.ports.input.snippet.CreateSnippetUseCase;
 import br.com.codexia.snippet.application.ports.output.command.SnippetCommandPort;
-import br.com.codexia.snippet.application.ports.output.command.TagCommandPort;
 import br.com.codexia.snippet.application.ports.output.query.CategoryQueryPort;
 import br.com.codexia.snippet.application.ports.output.query.TagQueryPort;
 import br.com.codexia.snippet.application.usecase.mapper.SnippetResponseMapper;

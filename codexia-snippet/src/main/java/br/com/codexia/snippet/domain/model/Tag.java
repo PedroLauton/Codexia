@@ -1,9 +1,11 @@
 package br.com.codexia.snippet.domain.model;
 
 import br.com.codexia.shared.domain.model.WorkspaceId;
+import br.com.codexia.snippet.domain.exception.DeletedSnippetMutationException;
 import br.com.codexia.snippet.domain.exception.DeletedTagMutationException;
 
 import java.time.Instant;
+import java.util.Locale;
 
 public class Tag {
 
@@ -12,19 +14,20 @@ public class Tag {
     private String title;
     private String hexColor;
     private final Instant createdAt;
+    private Instant updatedAt;
     private Instant deletedAt;
-
 
     public Tag(WorkspaceId workspaceId, String title, String hexColor) {
         if (workspaceId == null) throw new IllegalArgumentException("WorkspaceId is mandatory.");
         if (title == null || title.isBlank()) throw new IllegalArgumentException("Title is mandatory.");
+        if (hexColor == null || hexColor.isBlank()) throw new IllegalArgumentException("HexColor is mandatory.");
         if (hexColor != null && !hexColor.matches("^#[0-9A-Fa-f]{6}$")) {
             throw new IllegalArgumentException("Invalid color format. Use Hexadecimal (ex: #FF0000).");
         }
 
         this.id = TagId.generate();
         this.workspaceId = workspaceId;
-        this.title = title;
+        this.title = title.trim().toLowerCase(Locale.ROOT);
         this.hexColor = hexColor;
         this.createdAt = Instant.now();
     }
@@ -32,10 +35,23 @@ public class Tag {
     public Tag(TagId id, WorkspaceId workspaceId, String title, String hexColor, Instant createdAt, Instant deletedAt) {
         this.id = id;
         this.workspaceId = workspaceId;
-        this.title = title;
+        this.title = title.trim().toLowerCase(Locale.ROOT);
         this.hexColor = hexColor;
         this.createdAt = createdAt;
         this.deletedAt = deletedAt;
+    }
+
+    public void updateMetadata(String title, String hexColor) {
+        checkNotDeleted();
+
+        if (title == null || title.isBlank()) throw new IllegalArgumentException("Title is mandatory.");
+
+        if (hexColor != null && !hexColor.matches("^#[0-9A-Fa-f]{6}$"))
+            throw new IllegalArgumentException("Invalid color format. Use Hexadecimal (ex: #FF0000).");
+
+        this.title = title.trim().toLowerCase(Locale.ROOT);
+        if (hexColor != null) this.hexColor = hexColor;
+        this.updatedAt = Instant.now();
     }
 
     public TagId getId() {
@@ -62,13 +78,22 @@ public class Tag {
         return deletedAt;
     }
 
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
     public void delete() {
-        if (this.deletedAt != null)
-            throw new DeletedTagMutationException("Operation rejected: Tag [" + this.id + "] is deleted.");
+        checkNotDeleted();
         this.deletedAt = Instant.now();
     }
 
     public boolean isDeleted() {
         return this.deletedAt != null;
+    }
+
+    private void checkNotDeleted() {
+        if (this.deletedAt != null) {
+            throw new DeletedTagMutationException(this.id);
+        }
     }
 }

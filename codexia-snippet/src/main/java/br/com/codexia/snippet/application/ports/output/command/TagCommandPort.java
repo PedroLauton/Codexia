@@ -8,4 +8,6 @@ import java.util.List;
 import java.util.Set;
 
 public interface TagCommandPort {
+    void save(Tag tag);
+    void delete(TagId id);
 }

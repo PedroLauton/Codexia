@@ -14,6 +14,13 @@ public enum ErrorCode {
 
     // Tag
     DELETED_TAG_MUTATION("TG001", "Operation rejected: tag is deleted."),
+    DUPLICATE_TAG_TITLE("TG002", "Tag title already exists in this workspace."),
+
+    // Category
+    CATEGORY_HAS_ACTIVE_SNIPPETS("CT001", "Category has active snippets."),
+    DELETED_CATEGORY_MUTATION("CT001", "Operation rejected: category is deleted."),
+    DUPLICATE_CATEGORY_NAME("CT002", "Category name already exists in this workspace."),
+    CATEGORY_NOT_DELETED("CT003", "Category is not deleted and cannot be restored."),
 
     // Workspace — prefixo WS
     WORKSPACE_MEMBER_ALREADY_EXISTS("WS001", "Member already exists in workspace."),

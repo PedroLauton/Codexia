@@ -15,6 +15,7 @@ public enum ErrorCode {
     // Tag
     DELETED_TAG_MUTATION("TG001", "Operation rejected: tag is deleted."),
     DUPLICATE_TAG_TITLE("TG002", "Tag title already exists in this workspace."),
+    TAG_NOT_DELETED("TG003", "Tag is not deleted and cannot be restored."),
 
     // Category
     CATEGORY_HAS_ACTIVE_SNIPPETS("CT001", "Category has active snippets."),

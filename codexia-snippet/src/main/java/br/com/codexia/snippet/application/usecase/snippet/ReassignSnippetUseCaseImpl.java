@@ -33,7 +33,6 @@ public class ReassignSnippetUseCaseImpl implements ReassignSnippetUseCase {
 
     @Override
     public SnippetReassignedResponse execute(ReassignSnippetCommand command) {
-
         WorkspaceId workspaceId = WorkspaceId.fromString(command.workspaceId());
         SnippetId snippetId = SnippetId.fromString(command.snippetId());
 

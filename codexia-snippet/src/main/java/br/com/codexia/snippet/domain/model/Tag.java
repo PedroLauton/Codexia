@@ -3,6 +3,7 @@ package br.com.codexia.snippet.domain.model;
 import br.com.codexia.shared.domain.model.WorkspaceId;
 import br.com.codexia.snippet.domain.exception.DeletedSnippetMutationException;
 import br.com.codexia.snippet.domain.exception.DeletedTagMutationException;
+import br.com.codexia.snippet.domain.exception.TagNotDeletedException;
 
 import java.time.Instant;
 import java.util.Locale;
@@ -89,6 +90,15 @@ public class Tag {
 
     public boolean isDeleted() {
         return this.deletedAt != null;
+    }
+
+    public void restore() {
+        if (!isDeleted()) {
+            throw new TagNotDeletedException(this.id);
+        }
+
+        this.deletedAt = null;
+        this.updatedAt = Instant.now();
     }
 
     private void checkNotDeleted() {

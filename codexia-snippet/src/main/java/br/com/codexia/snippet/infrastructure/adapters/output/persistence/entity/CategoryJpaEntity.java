@@ -1,9 +1,6 @@
 package br.com.codexia.snippet.infrastructure.adapters.output.persistence.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -29,7 +26,16 @@ public class CategoryJpaEntity {
     private UUID workspaceId;
 
     @Setter
-    @Column(nullable = false, length = 50)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id", nullable = true)
+    private CategoryJpaEntity parent;
+
+    @Setter
+    @Column(name = "depth", nullable = false)
+    private int depth;
+
+    @Setter
+    @Column(nullable = false, length = 100)
     private String name;
 
     @Setter

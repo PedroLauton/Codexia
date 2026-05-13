@@ -1,0 +1,30 @@
+# Controle de Versão
+.git/
+
+# Pastas de Build e Compilação do Gradle
+.gradle/
+build/
+out/
+bin/
+target/
+
+# Binários do Java
+*.class
+*.jar
+*.war
+
+# Arquivos de Configuração da IDE (IntelliJ / VS Code)
+.idea/
+*.iml
+*.iws
+.vscode/
+
+# Logs e Arquivos Temporários
+*.log
+tmp/
+temp/
+hs_err_pid*.log
+
+# Arquivos de Sistema Operacional
+.DS_Store
+Thumbs.db

@@ -17,7 +17,7 @@ public final class SnippetResponseMapper {
                 snippet.getId().value().toString(),
                 snippet.getWorkspaceId().value().toString(),
                 snippet.getAccountId().value().toString(),
-                snippet.getCategoryId().value().toString(),
+                snippet.getCategoryId() != null ? snippet.getCategoryId().value().toString() : null,
 
                 tags.stream()
                         .map(SnippetResponseMapper::toTagSummary)
@@ -45,7 +45,7 @@ public final class SnippetResponseMapper {
         return new SnippetReassignedResponse(
                 snippet.getId().value().toString(),
                 snippet.getWorkspaceId().value().toString(),
-                snippet.getCategoryId().value().toString(),
+                snippet.getCategoryId() != null ? snippet.getCategoryId().value().toString() : null,
                 tags.stream()
                         .map(SnippetResponseMapper::toTagSummary)
                         .collect(Collectors.toUnmodifiableSet()),

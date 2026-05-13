@@ -1,28 +1,23 @@
 package br.com.codexia.snippet.application.usecase.tag;
 
-import br.com.codexia.shared.domain.exception.ResourceNotFoundException;
 import br.com.codexia.shared.domain.model.WorkspaceId;
 import br.com.codexia.snippet.application.dto.command.RestoreTagCommand;
-import br.com.codexia.snippet.application.dto.command.UpdateTagCommand;
 import br.com.codexia.snippet.application.dto.response.TagResponse;
 import br.com.codexia.snippet.application.ports.input.tag.RestoreTagUseCase;
 import br.com.codexia.snippet.application.ports.output.command.TagCommandPort;
-import br.com.codexia.snippet.application.ports.output.query.TagQueryPort;
 import br.com.codexia.snippet.application.usecase.mapper.TagResponseMapper;
-import br.com.codexia.snippet.domain.exception.DuplicateTagTitleException;
+import br.com.codexia.snippet.application.usecase.shared.TagFinder;
 import br.com.codexia.snippet.domain.model.Tag;
 import br.com.codexia.snippet.domain.model.TagId;
-
-import java.util.Locale;
 
 public class RestoreTagUseCaseImpl implements RestoreTagUseCase {
 
     private final TagCommandPort tagCommandPort;
-    private final TagQueryPort tagQueryPort;
+    private final TagFinder tagFinder;
 
-    public RestoreTagUseCaseImpl(TagCommandPort tagCommandPort, TagQueryPort tagQueryPort) {
+    public RestoreTagUseCaseImpl(TagCommandPort tagCommandPort, TagFinder tagFinder) {
         this.tagCommandPort = tagCommandPort;
-        this.tagQueryPort = tagQueryPort;
+        this.tagFinder = tagFinder;
     }
 
     @Override
@@ -30,20 +25,11 @@ public class RestoreTagUseCaseImpl implements RestoreTagUseCase {
         WorkspaceId workspaceId = WorkspaceId.fromString(command.workspaceId());
         TagId tagId = TagId.fromString(command.tagId());
 
-        Tag tag = findTagOrThrow(tagId, workspaceId);
+        Tag tag = tagFinder.findDeletedOrThrow(tagId, workspaceId);
 
-        tag.
-    }
+        tag.restore();
+        tagCommandPort.save(tag);
 
-    private Tag findTagOrThrow(TagId tagId, WorkspaceId workspaceId) {
-        return tagQueryPort.findById(tagId, workspaceId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Tag with id: " + tagId.value() + " not found"));
-    }
-
-    private void validateTitleUniqueness(String title, WorkspaceId workspaceId, TagId tagId) {
-        if (tagQueryPort.existsByTitleAndWorkspace(title.trim().toLowerCase(Locale.ROOT), workspaceId, tagId)) {
-            throw new DuplicateTagTitleException(title, workspaceId);
-        }
+        return TagResponseMapper.toResponse(tag);
     }
 }

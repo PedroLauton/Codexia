@@ -1,4 +1,4 @@
-package br.com.codexia.snippet.application.usecase;
+package br.com.codexia.snippet.application.usecase.snippet;
 
 import br.com.codexia.shared.domain.exception.ResourceNotFoundException;
 import br.com.codexia.shared.domain.model.WorkspaceId;
@@ -45,10 +45,14 @@ public class CreateSnippetUseCaseImplTest {
     private CreateSnippetUseCaseImpl useCase;
 
     private CreateSnippetCommand buildCommand(Set<String> tagIds) {
+        return buildCommand(tagIds, UUID.randomUUID().toString());
+    }
+
+    private CreateSnippetCommand buildCommand(Set<String> tagIds, String categoryId) {
         return new CreateSnippetCommand(
                 UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(),
-                UUID.randomUUID().toString(),
+                categoryId,
                 tagIds,
                 "Bubble Sort",
                 "Algoritmo de ordenação",
@@ -161,6 +165,28 @@ public class CreateSnippetUseCaseImplTest {
             // Assert
             verifyNoInteractions(snippetCommandPort);
             verify(tagQueryPort, times(1)).findAllByIds(any(), any());
+        }
+    }
+
+    @Nested
+    @DisplayName("When categoryId is null")
+    class WhenCategoryIdIsNull {
+
+        @Test
+        @DisplayName("Should create snippet at root without calling categoryQueryPort")
+        void shouldCreateSnippetWithNullCategory() {
+            // Arrange
+            CreateSnippetCommand command = buildCommand(Set.of(), null);
+
+            // Act
+            SnippetResponse response = useCase.execute(command);
+
+            // Assert
+            assertThat(response).isNotNull();
+            assertThat(response.categoryId()).isNull();
+            verify(snippetCommandPort, times(1)).save(any());
+            verifyNoInteractions(categoryQueryPort);
+            verifyNoInteractions(tagQueryPort);
         }
     }
 

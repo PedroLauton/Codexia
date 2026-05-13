@@ -19,9 +19,13 @@ public enum ErrorCode {
 
     // Category
     CATEGORY_HAS_ACTIVE_SNIPPETS("CT001", "Category has active snippets."),
-    DELETED_CATEGORY_MUTATION("CT001", "Operation rejected: category is deleted."),
+    DELETED_CATEGORY_MUTATION("CT004", "Operation rejected: category is deleted."),
     DUPLICATE_CATEGORY_NAME("CT002", "Category name already exists in this workspace."),
     CATEGORY_NOT_DELETED("CT003", "Category is not deleted and cannot be restored."),
+    CATEGORY_SELF_REFERENCE("CT005", "A category cannot be its own parent."),
+    CATEGORY_MAX_DEPTH_EXCEEDED("CT006", "Category hierarchy exceeds maximum depth of 5."),
+    CATEGORY_HAS_CHILDREN("CT007", "Category has children and cannot be purged."),
+    CATEGORY_CIRCULAR_REFERENCE("CT008", "Reparenting would create a circular reference."),
 
     // Workspace — prefixo WS
     WORKSPACE_MEMBER_ALREADY_EXISTS("WS001", "Member already exists in workspace."),

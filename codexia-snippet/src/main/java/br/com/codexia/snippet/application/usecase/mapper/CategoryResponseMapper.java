@@ -12,6 +12,8 @@ public final class CategoryResponseMapper {
         return new CategoryResponse(
                 category.getId().value().toString(),
                 category.getWorkspaceId().value().toString(),
+                category.getParentId() != null ? category.getParentId().value().toString() : null,
+                category.getDepth(),
                 category.getName(),
                 category.getDescription(),
                 category.getCreatedAt(),

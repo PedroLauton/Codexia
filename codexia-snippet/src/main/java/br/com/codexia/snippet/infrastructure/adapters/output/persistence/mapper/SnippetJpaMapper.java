@@ -44,11 +44,15 @@ public final class SnippetJpaMapper {
                 .map(SnippetJpaMapper::toVersionDomain)
                 .collect(Collectors.toUnmodifiableSet());
 
+        CategoryId categoryId = entity.getCategory() != null
+                ? CategoryId.fromString(entity.getCategory().getId().toString())
+                : null;
+
         return new Snippet(
                 SnippetId.fromString(entity.getId().toString()),
                 WorkspaceId.fromString(entity.getWorkspaceId().toString()),
                 AccountId.fromString(entity.getAccountId().toString()),
-                CategoryId.fromString(entity.getCategory().getId().toString()),
+                categoryId,
                 tagIds,
                 versions,
                 entity.getCreatedAt(),

@@ -37,7 +37,9 @@ public class SnippetCommandAdapter implements SnippetCommandPort {
 
     @Override
     public void save(Snippet snippet) {
-        CategoryJpaEntity  category = categoryJpaRepository.getReferenceById(snippet.getCategoryId().value());
+        CategoryJpaEntity category = snippet.getCategoryId() != null
+                ? categoryJpaRepository.getReferenceById(snippet.getCategoryId().value())
+                : null;
 
         Set<TagJpaEntity> tags = snippet.getTagIds().stream()
                 .map(tagId -> tagJpaRepository.getReferenceById(tagId.value()))

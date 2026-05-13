@@ -30,7 +30,6 @@ public class Snippet {
 
         if (workspaceId == null) throw new IllegalArgumentException("Workspace is mandatory.");
         if (accountId == null) throw new IllegalArgumentException("Account is mandatory.");
-        if (categoryId == null) throw new IllegalArgumentException("Category is mandatory.");
 
         this.tagIds = tagIds != null ? new HashSet<>(tagIds) : new HashSet<>();
 
@@ -71,11 +70,8 @@ public class Snippet {
 
     public void assignToCategory(CategoryId categoryId) {
         checkNotDeleted();
-        if (categoryId == null) {
-            throw new IllegalArgumentException("Category cannot be null.");
-        }
-
         this.categoryId = categoryId;
+        this.updatedAt = Instant.now();
     }
 
     public void linkTag(TagId tagId) {

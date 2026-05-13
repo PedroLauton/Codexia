@@ -1,37 +1,49 @@
 package br.com.codexia.snippet.domain.model;
 
 import br.com.codexia.shared.domain.model.WorkspaceId;
+import br.com.codexia.snippet.domain.exception.CategoryMaxDepthExceededException;
 import br.com.codexia.snippet.domain.exception.CategoryNotDeletedException;
+import br.com.codexia.snippet.domain.exception.CategorySelfReferenceException;
 import br.com.codexia.snippet.domain.exception.DeletedCategoryMutationException;
 
 import java.time.Instant;
 
 public class Category {
 
+    public static final int MAX_DEPTH = 5;
+
     private final CategoryId id;
     private WorkspaceId workspaceId;
+    private CategoryId parentId;
+    private int depth;
     private String name;
     private String description;
     private final Instant createdAt;
     private Instant updatedAt;
     private Instant deletedAt;
 
-    public Category(WorkspaceId workspaceId, String name, String description) {
+    public Category(WorkspaceId workspaceId, String name, String description, CategoryId parentId, int depth) {
 
         if (name == null || name.isBlank()) throw new IllegalArgumentException("Name is mandatory.");
         if (workspaceId == null) throw new IllegalArgumentException("Workspace is mandatory.");
 
         this.id = CategoryId.generate();
         this.workspaceId = workspaceId;
+        this.parentId = parentId;
+        this.depth = depth;
         this.name = name;
         this.description = description;
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
     }
 
-    public Category(CategoryId id, WorkspaceId workspaceId, String name, String description, Instant createdAt, Instant updatedAt, Instant deletedAt) {
+    public Category(CategoryId id, WorkspaceId workspaceId, String name, String description,
+                    CategoryId parentId, int depth,
+                    Instant createdAt, Instant updatedAt, Instant deletedAt) {
         this.id = id;
         this.workspaceId = workspaceId;
+        this.parentId = parentId;
+        this.depth = depth;
         this.name = name;
         this.description = description;
         this.createdAt = createdAt;
@@ -50,6 +62,19 @@ public class Category {
         this.updatedAt = Instant.now();
     }
 
+    public void reparent(CategoryId newParentId, int newDepth) {
+        checkNotDeleted();
+        if (newParentId != null && newParentId.equals(this.id)) {
+            throw new CategorySelfReferenceException(this.id);
+        }
+        if (newDepth > MAX_DEPTH) {
+            throw new CategoryMaxDepthExceededException(this.id, newDepth);
+        }
+        this.parentId = newParentId;
+        this.depth = newDepth;
+        this.updatedAt = Instant.now();
+    }
+
     public void restore() {
         if (!isDeleted()) {
             throw new CategoryNotDeletedException(this.id);
@@ -58,7 +83,6 @@ public class Category {
         this.deletedAt = null;
         this.updatedAt = Instant.now();
     }
-
 
     public void delete() {
         checkNotDeleted();
@@ -75,6 +99,14 @@ public class Category {
 
     public WorkspaceId getWorkspaceId() {
         return workspaceId;
+    }
+
+    public CategoryId getParentId() {
+        return parentId;
+    }
+
+    public int getDepth() {
+        return depth;
     }
 
     public String getName() {

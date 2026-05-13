@@ -19,7 +19,6 @@ public record CreateSnippetRequest(
         @NotBlank(message = "language is mandatory")
         String language,
 
-        @NotBlank(message = "categoryId is mandatory")
         String categoryId,
 
         @Size(max = 10, message = "Cannot exceed 10 tags.")

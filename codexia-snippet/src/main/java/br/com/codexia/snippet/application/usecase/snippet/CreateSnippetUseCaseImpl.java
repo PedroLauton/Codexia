@@ -32,12 +32,16 @@ public class CreateSnippetUseCaseImpl implements CreateSnippetUseCase {
 
         WorkspaceId workspaceId = WorkspaceId.fromString(command.workspaceId());
         AccountId  accountId = AccountId.fromString(command.accountId());
-        CategoryId categoryId = CategoryId.fromString(command.categoryId());
         Language language = Language.fromString(command.language());
 
         Set<TagId> tagIds = resolveTagIds(command.tagIds());
 
-        validateCategory(categoryId, workspaceId);
+        CategoryId categoryId = null;
+        if (command.categoryId() != null) {
+            categoryId = CategoryId.fromString(command.categoryId());
+            validateCategory(categoryId, workspaceId);
+        }
+
         List<Tag> tags = validateAndResolveTags(tagIds, workspaceId);
 
         Snippet newSnippet = new Snippet(workspaceId, accountId, categoryId, tagIds,

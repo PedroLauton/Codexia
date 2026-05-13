@@ -5,6 +5,8 @@ import java.time.Instant;
 public record CategoryResponse(
         String id,
         String workspaceId,
+        String parentId,
+        int depth,
         String name,
         String description,
         Instant createdAt,

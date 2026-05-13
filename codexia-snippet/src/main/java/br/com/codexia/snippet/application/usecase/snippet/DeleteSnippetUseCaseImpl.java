@@ -1,22 +1,22 @@
 package br.com.codexia.snippet.application.usecase.snippet;
 
-import br.com.codexia.shared.domain.exception.ResourceNotFoundException;
 import br.com.codexia.shared.domain.model.WorkspaceId;
 import br.com.codexia.snippet.application.dto.command.DeleteSnippetCommand;
 import br.com.codexia.snippet.application.ports.input.snippet.DeleteSnippetUseCase;
 import br.com.codexia.snippet.application.ports.output.command.SnippetCommandPort;
-import br.com.codexia.snippet.application.ports.output.query.SnippetQueryPort;
+import br.com.codexia.snippet.application.usecase.shared.SnippetFinder;
 import br.com.codexia.snippet.domain.model.Snippet;
 import br.com.codexia.snippet.domain.model.SnippetId;
 
 public class DeleteSnippetUseCaseImpl implements DeleteSnippetUseCase {
 
     private final SnippetCommandPort snippetCommandPort;
-    private final SnippetQueryPort snippetQueryPort;
+    private final SnippetFinder snippetFinder;
 
-    public DeleteSnippetUseCaseImpl(SnippetCommandPort snippetCommandPort, SnippetQueryPort snippetQueryPort) {
+    public DeleteSnippetUseCaseImpl(SnippetCommandPort snippetCommandPort,
+                                    SnippetFinder snippetFinder) {
         this.snippetCommandPort = snippetCommandPort;
-        this.snippetQueryPort = snippetQueryPort;
+        this.snippetFinder = snippetFinder;
     }
 
     @Override
@@ -24,15 +24,10 @@ public class DeleteSnippetUseCaseImpl implements DeleteSnippetUseCase {
         WorkspaceId workspaceId = WorkspaceId.fromString(command.workspaceId());
         SnippetId snippetId = SnippetId.fromString(command.snippetId());
 
-        Snippet snippet = findSnippetOrThrow(snippetId, workspaceId);
+        Snippet snippet = snippetFinder.findActiveOrThrow(snippetId, workspaceId);
 
         snippet.delete();
 
         snippetCommandPort.save(snippet);
-    }
-
-    private Snippet findSnippetOrThrow(SnippetId snippetId, WorkspaceId workspaceId) {
-        return snippetQueryPort.findById(snippetId, workspaceId)
-                .orElseThrow(() -> new ResourceNotFoundException("Snippet with id: " + snippetId + " not found"));
     }
 }

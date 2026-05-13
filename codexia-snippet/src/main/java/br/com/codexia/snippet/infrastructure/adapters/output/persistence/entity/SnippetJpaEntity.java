@@ -29,7 +29,7 @@ public class SnippetJpaEntity {
     private UUID accountId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id", nullable = true)
     private CategoryJpaEntity category;
 
     @Setter

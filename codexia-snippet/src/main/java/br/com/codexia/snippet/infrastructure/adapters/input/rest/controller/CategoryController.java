@@ -20,7 +20,7 @@ public class CategoryController {
     private final DeleteCategoryUseCase deleteCategoryUseCase;
     private final RestoreCategoryUseCase restoreCategoryUseCase;
     private final PurgeCategoryUseCase purgeCategoryUseCase;
-    private final ReparentCategoryUseCase reparentCategoryUseCase;
+private final ReparentCategoryUseCase reparentCategoryUseCase;
 
     public CategoryController(CreateCategoryUseCase createCategoryUseCase,
                               UpdateCategoryUseCase updateCategoryUseCase,

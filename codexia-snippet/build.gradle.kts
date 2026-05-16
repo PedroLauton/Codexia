@@ -24,6 +24,10 @@ dependencies {
     testCompileOnly("org.projectlombok:lombok")
     testAnnotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-testcontainers")
+    testImplementation("org.testcontainers:junit-jupiter:1.21.3")
+    testImplementation("org.testcontainers:postgresql:1.21.3")
+    testImplementation("com.tngtech.archunit:archunit-junit5:1.4.1")
 }
 
 // Gradle 9.4.1 was built against JUnit Platform 5.x; JP 6.0.3 (from Spring Boot 4)

@@ -1,9 +1,9 @@
 package br.com.codexia.snippet.application.usecase.mapper;
 
 import br.com.codexia.snippet.application.dto.response.*;
-import br.com.codexia.snippet.domain.model.Snippet;
-import br.com.codexia.snippet.domain.model.SnippetVersion;
-import br.com.codexia.snippet.domain.model.Tag;
+import br.com.codexia.snippet.domain.model.aggregate.Snippet;
+import br.com.codexia.snippet.domain.model.entity.SnippetVersion;
+import br.com.codexia.snippet.domain.model.aggregate.Tag;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,8 +1,8 @@
 package br.com.codexia.snippet.infrastructure.adapters.output.persistence.mapper;
 
 import br.com.codexia.shared.domain.model.WorkspaceId;
-import br.com.codexia.snippet.domain.model.Tag;
-import br.com.codexia.snippet.domain.model.TagId;
+import br.com.codexia.snippet.domain.model.aggregate.Tag;
+import br.com.codexia.snippet.domain.model.valueobject.TagId;
 import br.com.codexia.snippet.infrastructure.adapters.output.persistence.entity.TagJpaEntity;
 
 // infrastructure/adapters/output/persistence/mapper/TagJpaMapper.java

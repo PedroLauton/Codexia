@@ -34,6 +34,9 @@ public enum ErrorCode {
     // Identity — prefixo ID
     ACCOUNT_ALREADY_EXISTS("ID001", "Account already exists."),
     INVALID_CREDENTIALS("ID002", "Invalid credentials."),
+    ACCOUNT_DELETED("ID003", "Account is deleted."),
+    ACCOUNT_NOT_DELETED("ID004", "Account is not deleted and cannot be restored."),
+    ACCOUNT_GRACE_PERIOD_EXPIRED("ID005", "Account grace period has expired."),
 
     // AI — prefixo AI
     AI_PROVIDER_UNAVAILABLE("AI001", "AI provider unavailable."),

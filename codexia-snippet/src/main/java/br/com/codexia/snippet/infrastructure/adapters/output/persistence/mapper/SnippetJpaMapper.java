@@ -2,7 +2,12 @@ package br.com.codexia.snippet.infrastructure.adapters.output.persistence.mapper
 
 import br.com.codexia.shared.domain.model.AccountId;
 import br.com.codexia.shared.domain.model.WorkspaceId;
-import br.com.codexia.snippet.domain.model.*;
+import br.com.codexia.snippet.domain.model.aggregate.Snippet;
+import br.com.codexia.snippet.domain.model.entity.SnippetVersion;
+import br.com.codexia.snippet.domain.model.valueobject.CategoryId;
+import br.com.codexia.snippet.domain.model.valueobject.SnippetId;
+import br.com.codexia.snippet.domain.model.valueobject.SnippetVersionId;
+import br.com.codexia.snippet.domain.model.valueobject.TagId;
 import br.com.codexia.snippet.infrastructure.adapters.output.persistence.entity.CategoryJpaEntity;
 import br.com.codexia.snippet.infrastructure.adapters.output.persistence.entity.SnippetJpaEntity;
 import br.com.codexia.snippet.infrastructure.adapters.output.persistence.entity.SnippetVersionJpaEntity;

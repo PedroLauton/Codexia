@@ -5,8 +5,8 @@ import br.com.codexia.snippet.application.dto.command.DeleteTagCommand;
 import br.com.codexia.snippet.application.ports.input.tag.DeleteTagUseCase;
 import br.com.codexia.snippet.application.ports.output.command.TagCommandPort;
 import br.com.codexia.snippet.application.usecase.shared.TagFinder;
-import br.com.codexia.snippet.domain.model.Tag;
-import br.com.codexia.snippet.domain.model.TagId;
+import br.com.codexia.snippet.domain.model.aggregate.Tag;
+import br.com.codexia.snippet.domain.model.valueobject.TagId;
 
 public class DeleteTagUseCaseImpl implements DeleteTagUseCase {
 

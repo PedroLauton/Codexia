@@ -1,7 +1,7 @@
 package br.com.codexia.snippet.application.usecase.mapper;
 
 import br.com.codexia.snippet.application.dto.response.CategoryResponse;
-import br.com.codexia.snippet.domain.model.Category;
+import br.com.codexia.snippet.domain.model.aggregate.Category;
 
 public final class CategoryResponseMapper {
 

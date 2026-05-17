@@ -5,7 +5,7 @@ import br.com.codexia.snippet.application.dto.command.PurgeTagCommand;
 import br.com.codexia.snippet.application.ports.input.tag.PurgeTagUseCase;
 import br.com.codexia.snippet.application.ports.output.command.TagCommandPort;
 import br.com.codexia.snippet.application.usecase.shared.TagFinder;
-import br.com.codexia.snippet.domain.model.TagId;
+import br.com.codexia.snippet.domain.model.valueobject.TagId;
 
 public class PurgeTagUseCaseImpl implements PurgeTagUseCase {
 

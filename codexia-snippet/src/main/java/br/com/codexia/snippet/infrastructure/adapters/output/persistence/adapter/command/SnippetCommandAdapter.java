@@ -1,9 +1,7 @@
 package br.com.codexia.snippet.infrastructure.adapters.output.persistence.adapter.command;
 
-import br.com.codexia.shared.domain.model.WorkspaceId;
 import br.com.codexia.snippet.application.ports.output.command.SnippetCommandPort;
-import br.com.codexia.snippet.domain.model.Snippet;
-import br.com.codexia.snippet.domain.model.SnippetId;
+import br.com.codexia.snippet.domain.model.aggregate.Snippet;
 import br.com.codexia.snippet.infrastructure.adapters.output.persistence.entity.CategoryJpaEntity;
 import br.com.codexia.snippet.infrastructure.adapters.output.persistence.entity.SnippetJpaEntity;
 import br.com.codexia.snippet.infrastructure.adapters.output.persistence.entity.TagJpaEntity;
@@ -14,7 +12,6 @@ import br.com.codexia.snippet.infrastructure.adapters.output.persistence.reposit
 
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 

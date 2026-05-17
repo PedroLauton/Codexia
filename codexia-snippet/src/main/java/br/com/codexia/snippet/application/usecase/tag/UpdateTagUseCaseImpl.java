@@ -8,9 +8,9 @@ import br.com.codexia.snippet.application.ports.output.command.TagCommandPort;
 import br.com.codexia.snippet.application.ports.output.query.TagQueryPort;
 import br.com.codexia.snippet.application.usecase.mapper.TagResponseMapper;
 import br.com.codexia.snippet.application.usecase.shared.TagFinder;
-import br.com.codexia.snippet.domain.exception.DuplicateTagTitleException;
-import br.com.codexia.snippet.domain.model.Tag;
-import br.com.codexia.snippet.domain.model.TagId;
+import br.com.codexia.snippet.domain.exception.tag.DuplicateTagTitleException;
+import br.com.codexia.snippet.domain.model.aggregate.Tag;
+import br.com.codexia.snippet.domain.model.valueobject.TagId;
 
 import java.util.Locale;
 

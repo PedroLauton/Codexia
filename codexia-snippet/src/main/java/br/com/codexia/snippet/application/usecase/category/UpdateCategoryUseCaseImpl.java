@@ -8,9 +8,9 @@ import br.com.codexia.snippet.application.ports.output.command.CategoryCommandPo
 import br.com.codexia.snippet.application.ports.output.query.CategoryQueryPort;
 import br.com.codexia.snippet.application.usecase.mapper.CategoryResponseMapper;
 import br.com.codexia.snippet.application.usecase.shared.CategoryFinder;
-import br.com.codexia.snippet.domain.exception.DuplicateCategoryNameException;
-import br.com.codexia.snippet.domain.model.Category;
-import br.com.codexia.snippet.domain.model.CategoryId;
+import br.com.codexia.snippet.domain.exception.category.DuplicateCategoryNameException;
+import br.com.codexia.snippet.domain.model.aggregate.Category;
+import br.com.codexia.snippet.domain.model.valueobject.CategoryId;
 
 public class UpdateCategoryUseCaseImpl implements UpdateCategoryUseCase {
 

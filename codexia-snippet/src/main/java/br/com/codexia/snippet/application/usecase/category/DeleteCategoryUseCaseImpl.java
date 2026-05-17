@@ -6,9 +6,9 @@ import br.com.codexia.snippet.application.ports.input.category.DeleteCategoryUse
 import br.com.codexia.snippet.application.ports.output.command.CategoryCommandPort;
 import br.com.codexia.snippet.application.ports.output.query.SnippetQueryPort;
 import br.com.codexia.snippet.application.usecase.shared.CategoryFinder;
-import br.com.codexia.snippet.domain.exception.CategoryHasActiveSnippetsException;
-import br.com.codexia.snippet.domain.model.Category;
-import br.com.codexia.snippet.domain.model.CategoryId;
+import br.com.codexia.snippet.domain.exception.category.CategoryHasActiveSnippetsException;
+import br.com.codexia.snippet.domain.model.aggregate.Category;
+import br.com.codexia.snippet.domain.model.valueobject.CategoryId;
 
 public class DeleteCategoryUseCaseImpl implements DeleteCategoryUseCase {
 

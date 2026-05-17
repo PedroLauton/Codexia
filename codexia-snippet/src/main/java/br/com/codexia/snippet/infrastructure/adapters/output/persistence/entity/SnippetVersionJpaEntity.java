@@ -1,6 +1,6 @@
 package br.com.codexia.snippet.infrastructure.adapters.output.persistence.entity;
 
-import br.com.codexia.snippet.domain.model.Language;
+import br.com.codexia.snippet.domain.model.enums.Language;
 import jakarta.persistence.*;
 import lombok.*;
 

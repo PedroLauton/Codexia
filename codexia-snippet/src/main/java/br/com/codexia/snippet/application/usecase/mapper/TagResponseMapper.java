@@ -1,7 +1,7 @@
 package br.com.codexia.snippet.application.usecase.mapper;
 
 import br.com.codexia.snippet.application.dto.response.TagResponse;
-import br.com.codexia.snippet.domain.model.Tag;
+import br.com.codexia.snippet.domain.model.aggregate.Tag;
 
 public final class TagResponseMapper {
     private TagResponseMapper() {}

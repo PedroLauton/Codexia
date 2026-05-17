@@ -3,8 +3,8 @@ package br.com.codexia.snippet.application.usecase.shared;
 import br.com.codexia.shared.domain.exception.ResourceNotFoundException;
 import br.com.codexia.shared.domain.model.WorkspaceId;
 import br.com.codexia.snippet.application.ports.output.query.SnippetQueryPort;
-import br.com.codexia.snippet.domain.model.Snippet;
-import br.com.codexia.snippet.domain.model.SnippetId;
+import br.com.codexia.snippet.domain.model.aggregate.Snippet;
+import br.com.codexia.snippet.domain.model.valueobject.SnippetId;
 
 public class SnippetFinder {
 

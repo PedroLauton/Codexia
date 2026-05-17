@@ -2,8 +2,8 @@ package br.com.codexia.snippet.infrastructure.adapters.output.persistence.adapte
 
 import br.com.codexia.shared.domain.model.WorkspaceId;
 import br.com.codexia.snippet.application.ports.output.query.TagQueryPort;
-import br.com.codexia.snippet.domain.model.Tag;
-import br.com.codexia.snippet.domain.model.TagId;
+import br.com.codexia.snippet.domain.model.aggregate.Tag;
+import br.com.codexia.snippet.domain.model.valueobject.TagId;
 import br.com.codexia.snippet.infrastructure.adapters.output.persistence.mapper.TagJpaMapper;
 import br.com.codexia.snippet.infrastructure.adapters.output.persistence.repository.TagJpaRepository;
 

@@ -1,0 +1,164 @@
+package br.com.codexia.snippet.domain.model.aggregate;
+
+import br.com.codexia.shared.domain.model.AccountId;
+import br.com.codexia.shared.domain.model.WorkspaceId;
+import br.com.codexia.snippet.domain.exception.snippet.DeletedSnippetMutationException;
+import br.com.codexia.snippet.domain.exception.snippet.SnippetTagLimitException;
+import br.com.codexia.snippet.domain.model.entity.SnippetVersion;
+import br.com.codexia.snippet.domain.model.enums.Language;
+import br.com.codexia.snippet.domain.model.valueobject.CategoryId;
+import br.com.codexia.snippet.domain.model.valueobject.SnippetId;
+import br.com.codexia.snippet.domain.model.valueobject.TagId;
+
+import java.time.Instant;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+public class Snippet {
+
+    // TODO: Mover para SnippetPolicy ou SnippetDomainService quando
+    //  a regra exigir variação por Workspace ou plano de assinatura (quem sabe?).
+    private static final int MAX_TAGS = 10;
+
+    private final SnippetId id;
+    private final WorkspaceId workspaceId;
+    private final AccountId accountId;
+    private CategoryId categoryId;
+    private Set<TagId> tagIds;
+    private Set<SnippetVersion> versions;
+    private final Instant createdAt;
+    private Instant updatedAt;
+    private Instant deletedAt;
+
+    public Snippet(WorkspaceId workspaceId, AccountId accountId, CategoryId categoryId, Set<TagId> tagIds, String title, String description, String content, Language language) {
+
+        if (workspaceId == null) throw new IllegalArgumentException("Workspace is mandatory.");
+        if (accountId == null) throw new IllegalArgumentException("Account is mandatory.");
+
+        this.tagIds = tagIds != null ? new HashSet<>(tagIds) : new HashSet<>();
+
+        if (this.tagIds.size() > MAX_TAGS) {
+            throw new SnippetTagLimitException("The snippet cannot exceed the limit of " + MAX_TAGS + " tags.");
+        }
+
+        this.id = SnippetId.generate();
+        this.workspaceId = workspaceId;
+        this.accountId = accountId;
+        this.categoryId = categoryId;
+        this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
+        this.versions = new HashSet<>();
+
+        this.versions.add(buildVersion(title, description, content, language));
+    }
+
+    public Snippet(SnippetId id, WorkspaceId workspaceId, AccountId accountId,  CategoryId categoryId, Set<TagId> tagIds,  Set<SnippetVersion> versions, Instant createdAt,  Instant updatedAt, Instant deletedAt) {
+        this.id = id;
+        this.workspaceId = workspaceId;
+        this.accountId = accountId;
+        this.categoryId = categoryId;
+        this.tagIds = new HashSet<>(tagIds);
+        this.versions = new HashSet<>(versions);
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
+    }
+
+    public SnippetVersion addVersion(String title, String description, String content, Language language) {
+        checkNotDeleted();
+        SnippetVersion version = buildVersion(title, description, content, language);
+        this.versions.add(version);
+        this.updatedAt = Instant.now();
+        return version;
+    }
+
+    public void assignToCategory(CategoryId categoryId) {
+        checkNotDeleted();
+        this.categoryId = categoryId;
+        this.updatedAt = Instant.now();
+    }
+
+    public void linkTag(TagId tagId) {
+        checkNotDeleted();
+
+        if (tagId == null) {
+            throw new IllegalArgumentException("The tag cannot be null.");
+        }
+
+        if (this.tagIds.contains(tagId)) return;
+
+        if (this.tagIds.size() >= MAX_TAGS) {
+            throw new SnippetTagLimitException("Maximum limit of  " + MAX_TAGS + " tags reached.");
+        }
+
+        this.tagIds.add(tagId);
+        this.updatedAt = Instant.now();
+    }
+
+    public void unlinkTag(TagId tagId) {
+        checkNotDeleted();
+        if (tagId == null) return;
+
+        boolean removed = this.tagIds.remove(tagId);
+
+        if (removed) {
+            this.updatedAt = Instant.now();
+        }
+    }
+
+    public void delete() {
+        checkNotDeleted();
+        this.deletedAt = Instant.now();
+    }
+
+    public boolean isDeleted() {
+        return this.deletedAt != null;
+    }
+
+    private void checkNotDeleted() {
+        if (this.deletedAt != null) {
+            throw new DeletedSnippetMutationException(this.id);
+        }
+    }
+
+    private SnippetVersion buildVersion(String title, String description, String content, Language language) {
+        return new SnippetVersion(this.id, title, description, content, language);
+    }
+
+    public SnippetId getId() {
+        return id;
+    }
+
+    public WorkspaceId getWorkspaceId() {
+        return workspaceId;
+    }
+
+    public AccountId getAccountId() {
+        return accountId;
+    }
+
+    public CategoryId getCategoryId() {
+        return categoryId;
+    }
+
+    public Set<TagId> getTagIds() {
+        return Collections.unmodifiableSet(tagIds);
+    }
+
+    public Set<SnippetVersion> getVersions() {
+        return Collections.unmodifiableSet(versions);
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public Instant getDeletedAt() {
+        return deletedAt;
+    }
+}

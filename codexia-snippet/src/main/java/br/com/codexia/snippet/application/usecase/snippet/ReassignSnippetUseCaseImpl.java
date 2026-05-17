@@ -10,7 +10,11 @@ import br.com.codexia.snippet.application.ports.output.query.CategoryQueryPort;
 import br.com.codexia.snippet.application.ports.output.query.TagQueryPort;
 import br.com.codexia.snippet.application.usecase.mapper.SnippetResponseMapper;
 import br.com.codexia.snippet.application.usecase.shared.SnippetFinder;
-import br.com.codexia.snippet.domain.model.*;
+import br.com.codexia.snippet.domain.model.aggregate.Snippet;
+import br.com.codexia.snippet.domain.model.aggregate.Tag;
+import br.com.codexia.snippet.domain.model.valueobject.CategoryId;
+import br.com.codexia.snippet.domain.model.valueobject.SnippetId;
+import br.com.codexia.snippet.domain.model.valueobject.TagId;
 
 import java.util.HashSet;
 import java.util.List;

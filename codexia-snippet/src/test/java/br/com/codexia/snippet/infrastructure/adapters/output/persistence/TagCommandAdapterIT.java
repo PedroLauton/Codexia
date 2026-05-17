@@ -3,7 +3,7 @@ package br.com.codexia.snippet.infrastructure.adapters.output.persistence;
 import br.com.codexia.shared.domain.model.WorkspaceId;
 import br.com.codexia.snippet.application.ports.output.command.TagCommandPort;
 import br.com.codexia.snippet.application.ports.output.query.TagQueryPort;
-import br.com.codexia.snippet.domain.model.Tag;
+import br.com.codexia.snippet.domain.model.aggregate.Tag;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

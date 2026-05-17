@@ -6,8 +6,8 @@ import br.com.codexia.snippet.application.ports.input.category.PurgeCategoryUseC
 import br.com.codexia.snippet.application.ports.output.command.CategoryCommandPort;
 import br.com.codexia.snippet.application.ports.output.query.CategoryQueryPort;
 import br.com.codexia.snippet.application.usecase.shared.CategoryFinder;
-import br.com.codexia.snippet.domain.exception.CategoryHasChildrenException;
-import br.com.codexia.snippet.domain.model.CategoryId;
+import br.com.codexia.snippet.domain.exception.category.CategoryHasChildrenException;
+import br.com.codexia.snippet.domain.model.valueobject.CategoryId;
 
 public class PurgeCategoryUseCaseImpl implements PurgeCategoryUseCase {
 

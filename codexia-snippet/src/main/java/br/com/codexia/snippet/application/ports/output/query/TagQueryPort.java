@@ -1,8 +1,8 @@
 package br.com.codexia.snippet.application.ports.output.query;
 
 import br.com.codexia.shared.domain.model.WorkspaceId;
-import br.com.codexia.snippet.domain.model.Tag;
-import br.com.codexia.snippet.domain.model.TagId;
+import br.com.codexia.snippet.domain.model.aggregate.Tag;
+import br.com.codexia.snippet.domain.model.valueobject.TagId;
 
 import java.util.List;
 import java.util.Optional;

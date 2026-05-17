@@ -2,9 +2,9 @@ package br.com.codexia.snippet.infrastructure.adapters.output.persistence.adapte
 
 import br.com.codexia.shared.domain.model.WorkspaceId;
 import br.com.codexia.snippet.application.ports.output.query.SnippetQueryPort;
-import br.com.codexia.snippet.domain.model.CategoryId;
-import br.com.codexia.snippet.domain.model.Snippet;
-import br.com.codexia.snippet.domain.model.SnippetId;
+import br.com.codexia.snippet.domain.model.valueobject.CategoryId;
+import br.com.codexia.snippet.domain.model.aggregate.Snippet;
+import br.com.codexia.snippet.domain.model.valueobject.SnippetId;
 import br.com.codexia.snippet.infrastructure.adapters.output.persistence.mapper.SnippetJpaMapper;
 import br.com.codexia.snippet.infrastructure.adapters.output.persistence.repository.SnippetJpaRepository;
 import org.springframework.stereotype.Component;

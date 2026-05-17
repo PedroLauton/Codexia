@@ -9,8 +9,9 @@ import br.com.codexia.snippet.application.ports.output.command.SnippetCommandPor
 import br.com.codexia.snippet.application.ports.output.query.CategoryQueryPort;
 import br.com.codexia.snippet.application.ports.output.query.TagQueryPort;
 import br.com.codexia.snippet.application.usecase.shared.SnippetFinder;
-import br.com.codexia.snippet.application.usecase.snippet.ReassignSnippetUseCaseImpl;
-import br.com.codexia.snippet.domain.model.*;
+import br.com.codexia.snippet.domain.model.aggregate.Snippet;
+import br.com.codexia.snippet.domain.model.valueobject.CategoryId;
+import br.com.codexia.snippet.domain.model.valueobject.SnippetId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

@@ -3,7 +3,8 @@ package br.com.codexia.snippet.infrastructure.adapters.output.persistence;
 import br.com.codexia.shared.domain.model.WorkspaceId;
 import br.com.codexia.snippet.application.ports.output.command.TagCommandPort;
 import br.com.codexia.snippet.application.ports.output.query.TagQueryPort;
-import br.com.codexia.snippet.domain.model.Tag;
+import br.com.codexia.snippet.domain.model.aggregate.Tag;
+import br.com.codexia.snippet.domain.model.valueobject.TagId;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -172,7 +173,7 @@ class TagQueryAdapterIT extends BasePersistenceIntegrationTest {
         void shouldReturnOnlyFoundTagsWhenSomeIdsAreMissing() {
             WorkspaceId ws = WorkspaceId.generate();
             Tag tag1 = buildAndSaveTag(ws, "java");
-            var missingId = new br.com.codexia.snippet.domain.model.TagId(java.util.UUID.randomUUID());
+            var missingId = new TagId(java.util.UUID.randomUUID());
 
             List<Tag> result = tagQueryAdapter.findAllByIds(Set.of(tag1.getId(), missingId), ws);
 

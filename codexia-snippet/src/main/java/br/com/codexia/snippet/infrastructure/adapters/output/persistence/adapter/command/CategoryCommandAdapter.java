@@ -2,8 +2,8 @@ package br.com.codexia.snippet.infrastructure.adapters.output.persistence.adapte
 
 import br.com.codexia.shared.domain.model.WorkspaceId;
 import br.com.codexia.snippet.application.ports.output.command.CategoryCommandPort;
-import br.com.codexia.snippet.domain.model.Category;
-import br.com.codexia.snippet.domain.model.CategoryId;
+import br.com.codexia.snippet.domain.model.aggregate.Category;
+import br.com.codexia.snippet.domain.model.valueobject.CategoryId;
 import br.com.codexia.snippet.infrastructure.adapters.output.persistence.entity.CategoryJpaEntity;
 import br.com.codexia.snippet.infrastructure.adapters.output.persistence.mapper.CategoryJpaMapper;
 import br.com.codexia.snippet.infrastructure.adapters.output.persistence.repository.CategoryJpaRepository;

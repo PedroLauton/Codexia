@@ -1,5 +1,6 @@
 package br.com.codexia.identity.domain.model.aggregate;
 
+import br.com.codexia.identity.domain.model.valueobject.ProviderName;
 import br.com.codexia.shared.domain.model.AccountId;
 import br.com.codexia.identity.domain.exception.account.AccountDeletedException;
 import br.com.codexia.identity.domain.exception.account.AccountGracePeriodExpiredException;
@@ -7,11 +8,12 @@ import br.com.codexia.identity.domain.exception.account.AccountNotDeletedExcepti
 import br.com.codexia.identity.domain.model.entity.LocalCredential;
 import br.com.codexia.identity.domain.model.entity.ExternalIdentity;
 import br.com.codexia.identity.domain.model.enums.AccountRole;
-import br.com.codexia.identity.domain.model.enums.IdentityProvider;
 import br.com.codexia.identity.domain.model.enums.Permission;
 import br.com.codexia.identity.domain.model.valueobject.AvatarUrl;
 import br.com.codexia.identity.domain.model.valueobject.Email;
 import br.com.codexia.identity.domain.model.valueobject.Name;
+import br.com.codexia.shared.domain.event.DomainEvent;
+import br.com.codexia.identity.domain.event.AccountCreatedEvent;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -31,6 +33,8 @@ public class Account {
     private final Instant createdAt;
     private Instant updatedAt;
     private Instant deletedAt;
+
+    private final List<DomainEvent> domainEvents = new ArrayList<>();
 
     // base — inicialização comum para criação
     private Account(Email email, Name name) {
@@ -52,13 +56,27 @@ public class Account {
     public static Account createWithCredentials(Email email, Name name, String passwordHash) {
         Account account = new Account(email, name);
         account.localCredential = new LocalCredential(account.id, passwordHash);
+
+        account.registerEvent(new AccountCreatedEvent(
+                account.getId(),
+                account.getEmail(),
+                account.getName()
+        ));
+
         return account;
     }
 
-    public static Account createWithOAuth(Email email, Name name, AvatarUrl avatarUrl, IdentityProvider provider, String providerId) {
+    public static Account createWithOAuth(Email email, Name name, AvatarUrl avatarUrl, ProviderName providerName, String providerId) {
         Account account = new Account(email, name);
         account.avatarUrl = avatarUrl;
-        account.externalIdentities.add(new ExternalIdentity(account.id, provider, providerId));
+        account.externalIdentities.add(new ExternalIdentity(account.id, providerName, providerId));
+
+        account.registerEvent(new AccountCreatedEvent(
+                account.getId(),
+                account.getEmail(),
+                account.getName()
+        ));
+
         return account;
     }
 
@@ -75,12 +93,12 @@ public class Account {
         return account;
     }
 
-    public void linkOAuthCredential(IdentityProvider provider, String providerId) {
+    public void linkOAuthCredential(ProviderName providerName, String providerId) {
         checkNotDeleted();
-        boolean alreadyLinked = hasExternalIdentities(provider);
+        boolean alreadyLinked = hasExternalIdentities(providerName);
         if (alreadyLinked) return;
 
-        externalIdentities.add(new ExternalIdentity(this.id, provider, providerId));
+        externalIdentities.add(new ExternalIdentity(this.id, providerName, providerId));
         this.updatedAt = Instant.now();
     }
 
@@ -137,9 +155,9 @@ public class Account {
         return this.localCredential != null;
     }
 
-    public boolean hasExternalIdentities(IdentityProvider provider) {
+    public boolean hasExternalIdentities(ProviderName providerName) {
         return externalIdentities.stream()
-                .anyMatch(c -> c.getProvider() == provider);
+                .anyMatch(c -> c.getProvider() == providerName);
     }
 
     public boolean isDeleted() {
@@ -160,6 +178,16 @@ public class Account {
             throw new IllegalArgumentException("Email is mandatory.");
         if (name == null)
             throw new IllegalArgumentException("Name is mandatory.");
+    }
+
+    protected void registerEvent(DomainEvent event) {
+        this.domainEvents.add(event);
+    }
+
+    public List<DomainEvent> pullEvents() {
+        List<DomainEvent> events = List.copyOf(this.domainEvents);
+        this.domainEvents.clear();
+        return events;
     }
 
     public AccountId getId() { return id; }

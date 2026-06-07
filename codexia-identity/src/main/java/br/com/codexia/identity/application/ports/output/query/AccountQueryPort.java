@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface AccountQueryPort {
     Optional<Account> findByEmail(Email email);
     Optional<Account> findById(AccountId id);
+    Optional<Account> findDeletedById(AccountId id);
 }

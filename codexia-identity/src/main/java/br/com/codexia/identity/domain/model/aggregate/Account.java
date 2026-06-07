@@ -1,17 +1,15 @@
 package br.com.codexia.identity.domain.model.aggregate;
 
-import br.com.codexia.identity.domain.model.valueobject.ProviderName;
+import br.com.codexia.identity.domain.event.AccountDeletedEvent;
+import br.com.codexia.identity.domain.event.AccountRestoredEvent;
+import br.com.codexia.identity.domain.exception.account.InvalidCredentialsException;
+import br.com.codexia.identity.domain.model.valueobject.*;
 import br.com.codexia.shared.domain.model.AccountId;
 import br.com.codexia.identity.domain.exception.account.AccountDeletedException;
 import br.com.codexia.identity.domain.exception.account.AccountGracePeriodExpiredException;
 import br.com.codexia.identity.domain.exception.account.AccountNotDeletedException;
-import br.com.codexia.identity.domain.model.entity.LocalCredential;
-import br.com.codexia.identity.domain.model.entity.ExternalIdentity;
 import br.com.codexia.identity.domain.model.enums.AccountRole;
 import br.com.codexia.identity.domain.model.enums.Permission;
-import br.com.codexia.identity.domain.model.valueobject.AvatarUrl;
-import br.com.codexia.identity.domain.model.valueobject.Email;
-import br.com.codexia.identity.domain.model.valueobject.Name;
 import br.com.codexia.shared.domain.event.DomainEvent;
 import br.com.codexia.identity.domain.event.AccountCreatedEvent;
 
@@ -22,6 +20,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class Account {
+
+    private static final int GRACE_PERIOD_DAYS = 7;
 
     private final AccountId id;
     private Email email;
@@ -53,7 +53,7 @@ public class Account {
         this.createdAt = createdAt;
     }
 
-    public static Account createWithCredentials(Email email, Name name, String passwordHash) {
+    public static Account createWithCredentials(Email email, Name name, PasswordHash passwordHash) {
         Account account = new Account(email, name);
         account.localCredential = new LocalCredential(account.id, passwordHash);
 
@@ -102,7 +102,7 @@ public class Account {
         this.updatedAt = Instant.now();
     }
 
-    public void addLocalCredential(String passwordHash) {
+    public void addLocalCredential(PasswordHash passwordHash) {
         checkNotDeleted();
         if (this.localCredential != null)
             throw new IllegalStateException("Account already has a local credential.");
@@ -130,15 +130,18 @@ public class Account {
     public void delete() {
         checkNotDeleted();
         this.deletedAt = Instant.now();
+        registerEvent(new AccountDeletedEvent(this.id));
     }
 
-    public void restore(int gracePeriodDays) {
+    public void restore() {
         if (!isDeleted())
             throw new AccountNotDeletedException(this.id);
-        if (!isWithinGracePeriod(gracePeriodDays))
+        if (!isWithinGracePeriod())
             throw new AccountGracePeriodExpiredException(this.id);
+
         this.deletedAt = null;
         this.updatedAt = Instant.now();
+        registerEvent(new AccountRestoredEvent(this.id));
     }
 
     public void promoteToAdmin() {
@@ -164,8 +167,8 @@ public class Account {
         return this.deletedAt != null;
     }
 
-    private boolean isWithinGracePeriod(int gracePeriodDays) {
-        Instant expirationDate = deletedAt.plus(gracePeriodDays, ChronoUnit.DAYS);
+    private boolean isWithinGracePeriod() {
+        Instant expirationDate = deletedAt.plus(GRACE_PERIOD_DAYS, ChronoUnit.DAYS);
         return expirationDate.isAfter(Instant.now());
     }
 
@@ -188,6 +191,19 @@ public class Account {
         List<DomainEvent> events = List.copyOf(this.domainEvents);
         this.domainEvents.clear();
         return events;
+    }
+
+    public PasswordHash passwordHashForVerification() {
+        checkNotDeleted();
+        if (!hasLocalCredential()) throw new InvalidCredentialsException();
+        return localCredential.getPasswordHash();
+    }
+
+    public void changePassword(PasswordHash newPasswordHash) {
+        checkNotDeleted();
+        if (!hasLocalCredential()) throw new InvalidCredentialsException();
+        localCredential.changePassword(newPasswordHash);
+        this.updatedAt = Instant.now();
     }
 
     public AccountId getId() { return id; }

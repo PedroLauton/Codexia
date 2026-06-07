@@ -1,4 +1,4 @@
-package br.com.codexia.identity.domain.model.entity;
+package br.com.codexia.identity.domain.model.aggregate;
 
 import br.com.codexia.identity.domain.model.valueobject.ProviderName;
 import br.com.codexia.shared.domain.model.AccountId;
